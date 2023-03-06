@@ -13,6 +13,7 @@ impl View {
         let vec_iter = self.data.iter();
         let max_val = *vec_iter.max().unwrap();
         let mut vec_string = String::new();
+
         thread::sleep(Duration::from_millis((self.period*1000).into()));
 
         for curr_val in (1..=max_val).rev() {
@@ -27,8 +28,7 @@ impl View {
             }
             vec_string += "\n";
         }
-        println!("{}", vec_string);
-        println!();
+        println!("{}\n", vec_string);
     }
     
 }

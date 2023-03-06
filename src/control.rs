@@ -15,6 +15,7 @@ impl ShellSort {
         let data = Self::get_data();
         let view = Self::get_view(data);
         let algorithm = Self::get_algorithm(view);
+
         ShellSort{algorithm}
     }
 
@@ -28,12 +29,14 @@ impl ShellSort {
             Self::get_value("lower range", "Lower data range: "),
             Self::get_value("upper range", "Upper data range: ")
         );
+
         Self::generate_data(length, range)
     }
 
     fn get_view(data: Vec<u32>) -> View {
         let stack_char = Self::get_stack_char();
         let period = Self::get_value("sort period", "Time interval in seconds: ");
+
         View{data, stack_char, period}
     }
 
@@ -44,12 +47,14 @@ impl ShellSort {
         2. Bubble Sort
         3. Merge Sort
         ");
+
         Algorithm{view, method}
     }
 
     fn generate_data(length: u32, range: (u32, u32)) -> Vec<u32> {
         let mut rng = rand::thread_rng();
         let bound = Uniform::new(range.0, range.1);
+
         (0..length).map(|_| rng.sample(&bound)).collect()
     }
 
@@ -57,7 +62,9 @@ impl ShellSort {
         loop {
             println!("\n{}", message);
             let mut value = String::new();
+
             io::stdin().read_line(&mut value).expect("Failed to read line");
+
             let value: u32 = match value.trim().parse() {
                 Ok(num) => num,
                 Err(_) => {
@@ -65,6 +72,7 @@ impl ShellSort {
                     continue
                 }
             };
+
             return value;
         }
     }
@@ -72,7 +80,9 @@ impl ShellSort {
     fn get_stack_char() -> String {
         println!("\nInput the stack character for the vector.");
         let mut stack = String::new();
+
         io::stdin().read_line(&mut stack).expect("Failed to read line");
+
         String::from(stack.trim())
     }
  

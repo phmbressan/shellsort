@@ -21,7 +21,7 @@ impl Algorithm {
 
     fn insertion_sort(&mut self) {
         let s = &mut self.view;
-        
+
         s.display();
 
         for p in 1..s.data.len() {
@@ -29,6 +29,7 @@ impl Algorithm {
             while i > 0 && s.data[i - 1] > s.data[i] {
                 s.data.swap(i - 1, i);
                 i -= 1;
+                
                 s.display();
             }
         }
@@ -72,6 +73,7 @@ impl Algorithm {
                 start_index += 2 * inner_index;
             }
             inner_index *= 2;
+
             s.display();
         }
 
