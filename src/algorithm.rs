@@ -21,6 +21,7 @@ impl Algorithm {
 
     fn insertion_sort(&mut self) {
         let s = &mut self.view;
+        
         s.display();
 
         for p in 1..s.data.len() {
@@ -34,17 +35,19 @@ impl Algorithm {
     }
 
     fn bubble_sort(&mut self) {
-        self.view.display();
-        let mut n = self.view.data.len();
+        let s = &mut self.view;
+        let mut n = s.data.len();
+
+        s.display();
 
         while n > 1 {
             let mut index = 0;
             for p in 1..n {
-                if self.view.data[p - 1] > self.view.data[p] {
-                    self.view.data.swap(p - 1, p);
+                if s.data[p - 1] > s.data[p] {
+                    s.data.swap(p - 1, p);
                     index = p;
                 }
-                self.view.display();
+                s.display();
             }
             n = index;
         }
@@ -52,47 +55,48 @@ impl Algorithm {
     }
 
     fn merge_sort(&mut self) {
-        let vsize = self.view.data.len();
+        let s = &mut self.view;
+        let n = s.data.len();
         let mut inner_index = 1;
-        self.view.display();
+
+        s.display();
     
-        while inner_index < vsize {
-            let mut start_bin_index = 0;
-            while start_bin_index + inner_index < vsize {
-                let mut end_bin_index = start_bin_index + 2 * inner_index;
-                if end_bin_index > vsize {
-                    end_bin_index = vsize;
+        while inner_index < n {
+            let mut start_index = 0;
+            while start_index + inner_index < n {
+                let mut end_index = start_index + 2 * inner_index;
+                if end_index > n {
+                    end_index = n;
                 }
-                self.merge(start_bin_index, start_bin_index+inner_index, end_bin_index);
-                start_bin_index += 2 * inner_index;
+                merge(&mut s.data, start_index, start_index+inner_index, end_index);
+                start_index += 2 * inner_index;
             }
             inner_index *= 2;
-            self.view.display();
+            s.display();
         }
-    }
-    
-    fn merge(&mut self, left: usize, mid: usize, right: usize) {
-        let v = &mut self.view.data;
-        let v_left = v[left..mid].to_vec();
-        let v_right = v[mid..right].to_vec();
-    
-        let mut left_iter = v_left.iter().peekable();
-        let mut right_iter = v_right.iter().peekable();
-        let mut index = left;
-    
-        loop {
-            match (left_iter.peek(), right_iter.peek()) {
-                (Some(left_value), Some(right_value)) => match left_value.cmp(right_value) {
-                    Ordering::Less => v[index] = *left_iter.next().unwrap(),
-                    Ordering::Greater => v[index] = *right_iter.next().unwrap(),
-                    Ordering::Equal => v[index] = *left_iter.next().unwrap()
-                },
-                (Some(_), None) => v[index] = *left_iter.next().unwrap(),
-                (None, Some(_)) => v[index] = *right_iter.next().unwrap(),
-                _ => break
+
+        fn merge(s: &mut [u32], left: usize, mid: usize, right: usize) {
+            let s_left = s[left..mid].to_vec();
+            let s_right = s[mid..right].to_vec();
+
+            let mut left_iter = s_left.iter().peekable();
+            let mut right_iter = s_right.iter().peekable();
+            let mut index = left;
+
+            loop {
+                match (left_iter.peek(), right_iter.peek()) {
+                    (Some(left_value), Some(right_value)) => match left_value.cmp(right_value) {
+                        Ordering::Less => s[index] = *left_iter.next().unwrap(),
+                        Ordering::Greater => s[index] = *right_iter.next().unwrap(),
+                        Ordering::Equal => s[index] = *left_iter.next().unwrap()
+                    },
+                    (Some(_), None) => s[index] = *left_iter.next().unwrap(),
+                    (None, Some(_)) => s[index] = *right_iter.next().unwrap(),
+                    _ => break
+                }
+                index += 1;
             }
-            index += 1
         }
-    
     }
+
 }
