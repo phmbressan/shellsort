@@ -54,6 +54,28 @@ impl Algorithm {
     }
 
     fn merge_sort(&mut self) {
+        fn merge(s: &mut [u32], left: usize, mid: usize, right: usize) {
+            let s_left = s[left..mid].to_vec();
+            let s_right = s[mid..right].to_vec();
+
+            let mut left_iter = s_left.iter().peekable();
+            let mut right_iter = s_right.iter().peekable();
+            let mut index = left;
+
+            loop {
+                match (left_iter.peek(), right_iter.peek()) {
+                    (Some(left_value), Some(right_value)) => match left_value.cmp(right_value) {
+                        Ordering::Equal | Ordering::Less => s[index] = *left_iter.next().unwrap(),
+                        Ordering::Greater => s[index] = *right_iter.next().unwrap(),
+                    },
+                    (Some(_), None) => s[index] = *left_iter.next().unwrap(),
+                    (None, Some(_)) => s[index] = *right_iter.next().unwrap(),
+                    _ => break,
+                }
+                index += 1;
+            }
+        }
+
         let s = &mut self.view;
         let n = s.data.len();
         let mut inner_index = 1;
@@ -79,29 +101,6 @@ impl Algorithm {
                 start_index += 2 * inner_index;
             }
             inner_index *= 2;
-        }
-
-        fn merge(s: &mut [u32], left: usize, mid: usize, right: usize) {
-            let s_left = s[left..mid].to_vec();
-            let s_right = s[mid..right].to_vec();
-
-            let mut left_iter = s_left.iter().peekable();
-            let mut right_iter = s_right.iter().peekable();
-            let mut index = left;
-
-            loop {
-                match (left_iter.peek(), right_iter.peek()) {
-                    (Some(left_value), Some(right_value)) => match left_value.cmp(right_value) {
-                        Ordering::Less => s[index] = *left_iter.next().unwrap(),
-                        Ordering::Greater => s[index] = *right_iter.next().unwrap(),
-                        Ordering::Equal => s[index] = *left_iter.next().unwrap(),
-                    },
-                    (Some(_), None) => s[index] = *left_iter.next().unwrap(),
-                    (None, Some(_)) => s[index] = *right_iter.next().unwrap(),
-                    _ => break,
-                }
-                index += 1;
-            }
         }
     }
 }

@@ -9,6 +9,7 @@ pub struct ShellSort {
 }
 
 impl ShellSort {
+    #[must_use]
     pub fn new() -> ShellSort {
         let data = Self::get_data();
         let view = Self::get_view(data);
@@ -71,12 +72,11 @@ impl ShellSort {
                 .read_line(&mut value)
                 .expect("Failed to read line");
 
-            let value: u32 = match value.trim().parse() {
-                Ok(num) => num,
-                Err(_) => {
-                    println!("Error: Check {kind} input");
-                    continue;
-                }
+            let value: u32 = if let Ok(num) = value.trim().parse() {
+                num
+            } else {
+                println!("Error: Check {kind} input");
+                continue;
             };
 
             return value;

@@ -8,12 +8,16 @@ pub struct View {
 
 impl View {
     pub fn display(&self) {
-        let max_val = *self.data.iter().max().unwrap();
+        let max_val = if let Some(max) = self.data.iter().max() {
+            max
+        } else {
+            &0
+        };
         let mut vec_string = String::new();
 
         thread::sleep(Duration::from_millis((self.period * 1000).into()));
 
-        for curr_val in (1..=max_val).rev() {
+        for curr_val in (1..=*max_val).rev() {
             for value in &self.data {
                 if *value < curr_val {
                     vec_string += &" ".repeat(self.stack_char.len() + 2);
