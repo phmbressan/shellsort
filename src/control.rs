@@ -1,5 +1,6 @@
 use rand::{distributions::Uniform, Rng};
 use std::io;
+use std::mem::swap;
 
 use crate::algorithm::Algorithm;
 use crate::view::View;
@@ -10,12 +11,12 @@ pub struct ShellSort {
 
 impl ShellSort {
     #[must_use]
-    pub fn new() -> ShellSort {
+    pub fn new() -> Self {
         let data = Self::get_data();
         let view = Self::get_view(data);
         let algorithm = Self::get_algorithm(view);
 
-        ShellSort { algorithm }
+        Self { algorithm }
     }
 
     pub fn start(&mut self) {
@@ -24,12 +25,15 @@ impl ShellSort {
 
     fn get_data() -> Vec<u32> {
         let length = Self::get_value("vector length", "Length of the vector: ");
-        let range = (
-            Self::get_value("lower range", "Lower data range: "),
-            Self::get_value("upper range", "Upper data range: "),
-        );
+        let mut lower = Self::get_value("lower range", "Lower data range: ");
+        let mut upper = Self::get_value("upper range", "Upper data range: ");
 
-        Self::generate_data(length, range)
+        if upper < lower {
+            println!("Lower range is greater than upper range, values will be swapped");
+            swap(&mut lower, &mut upper);
+        }
+
+        Self::generate_data(length, (lower, upper))
     }
 
     fn get_view(data: Vec<u32>) -> View {
@@ -60,12 +64,12 @@ impl ShellSort {
         let mut rng = rand::thread_rng();
         let bound = Uniform::new(range.0, range.1);
 
-        (0..length).map(|_| rng.sample(&bound)).collect()
+        (0..length).map(|_| rng.sample(bound)).collect()
     }
 
     fn get_value(kind: &str, message: &str) -> u32 {
         loop {
-            println!("\n{}", message);
+            println!("\n{message}");
             let mut value = String::new();
 
             io::stdin()

@@ -8,11 +8,7 @@ pub struct View {
 
 impl View {
     pub fn display(&self) {
-        let max_val = if let Some(max) = self.data.iter().max() {
-            max
-        } else {
-            &0
-        };
+        let max_val = self.data.iter().max().map_or(&0, |max| max);
         let mut vec_string = String::new();
 
         thread::sleep(Duration::from_millis((self.period * 1000).into()));
@@ -29,6 +25,6 @@ impl View {
             }
             vec_string += "\n";
         }
-        println!("{}\n", vec_string);
+        println!("{vec_string}\n");
     }
 }
